@@ -166,13 +166,13 @@ Telefon raqami: {order_data.get('phone')}
 Manzil: {order_data.get('address')}
 Lokatsiya: [Yandex]({yandex_location_link}) [Google]({google_location_link})
 Maxsulot: {order_data.get('product')}
-Narxi: {order_data.get('price'):,}
+Narxi: {int(order_data.get('price')):,}
 Soni: {order_data.get('quantity')}
 Puli to'langanmi: {payment}
 To'lov turi: {pay_meth}
 Kommentariya: {order_data.get('comment')}
 
-Umumiy narx: {overall_price}:,"""
+Umumiy narx: {overall_price:,}"""
     await message.answer(data_fields, parse_mode="Markdown",
                          disable_web_page_preview=True)
     await state.update_data(data_fields=data_fields)
@@ -213,13 +213,13 @@ Telefon raqami: {order_data.get('phone')}
 Manzil: {order_data.get('address')}
 Lokatsiya: [Yandex]({yandex_location_link}) [Google]({google_location_link})
 Maxsulot: {order_data.get('product')}
-Narxi: {order_data.get('price'):,}
+Narxi: {int(order_data.get('price')):,}
 Soni: {order_data.get('quantity')}
 Puli to'langanmi: {payment}
 To'lov turi: {pay_meth}
 Kommentariya: {order_data.get('comment')}
 
-Umumiy narx: {overall_price}:,"""
+Umumiy narx: {overall_price:,}"""
         order_message = await message.bot.send_message(
             chat_id=GROUP_ID,
             text=data_fields,
@@ -282,7 +282,7 @@ Mijoz raqami: {order.phone_number}
 Manzil: {order.address}
 Lokatsiya: [Yandex]({yandex_location_link}) [Google]({google_location_link})
 Maxsulot: {order.product}
-Maxsulot narxi: {order.price}:,
+Maxsulot narxi: {order.price:,}
 Maxsulot soni: {order.quantity}
 Yetkazish status: {order.delivery_status}
 To'lov turi: {pay_meth}
@@ -346,7 +346,7 @@ Telefon: {order.phone_number}
 Manzil: {order.address}
 Lokatsiya: [Yandex]({yandex_location_link}) | [Google]({google_location_link})
 Maxsulot: {order.product}
-Narxi: {order.price}:,
+Narxi: {order.price:,}
 Soni: {order.quantity}
 Yetkazish status: {order.delivery_status}
 To'lov turi: {pay_meth}
