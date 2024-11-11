@@ -13,7 +13,7 @@ from misc import AdminStates, OrderStates, EditOrderStates
 from utils import get_detailed_order_statistics
 
 superuser = 5580965528
-GROUP_ID = -4597645134
+GROUP_ID = -4558043332
 
 main_router = Router()
 
@@ -77,21 +77,21 @@ async def new_order_handler(message: Message, state: FSMContext):
     await state.set_state(OrderStates.name)
 
 
-@main_router.message(OrderStates.name, F.text)
+@main_router.message(OrderStates.name, F.text != "Cancel")
 async def name_handler(message: Message, state: FSMContext):
     await message.answer("Mijozning telefon raqamini kiriting", reply_markup=await cancel_btn())
     await state.update_data(client_name=message.text)
     await state.set_state(OrderStates.phone)
 
 
-@main_router.message(OrderStates.phone, F.text)
+@main_router.message(OrderStates.phone, F.text != "Cancel")
 async def phone_handler(message: Message, state: FSMContext):
     await message.answer("Mijozning manzilini kiriting", reply_markup=await cancel_btn())
     await state.update_data(phone=message.text)
     await state.set_state(OrderStates.address)
 
 
-@main_router.message(OrderStates.address, F.text)
+@main_router.message(OrderStates.address, F.text != "Cancel")
 async def address_handler(message: Message, state: FSMContext):
     await message.answer("Mijozning lokatsiyasini jo'nating", reply_markup=await cancel_btn())
     await state.update_data(address=message.text)
@@ -105,14 +105,14 @@ async def location_handler(message: Message, state: FSMContext):
     await state.set_state(OrderStates.product)
 
 
-@main_router.message(OrderStates.product, F.text)
+@main_router.message(OrderStates.product, F.text != "Cancel")
 async def product_handler(message: Message, state: FSMContext):
     await message.answer("Maxsulotning narxini kiriting", reply_markup=await cancel_btn())
     await state.update_data(product=message.text)
     await state.set_state(OrderStates.price)
 
 
-@main_router.message(OrderStates.price, F.text)
+@main_router.message(OrderStates.price, F.text != "Cancel")
 async def price_handler(message: Message, state: FSMContext):
     await message.answer("Maxsulot sonini kiriting", reply_markup=await cancel_btn())
     if message.text.find('.'):
@@ -122,7 +122,7 @@ async def price_handler(message: Message, state: FSMContext):
     await state.set_state(OrderStates.quantity)
 
 
-@main_router.message(OrderStates.quantity, F.text)
+@main_router.message(OrderStates.quantity, F.text != "Cancel")
 async def quantity_handler(message: Message, state: FSMContext):
     await message.answer("To'lov turini tanlang", reply_markup=await payment_method_button())
     await state.update_data(quantity=message.text)
@@ -146,8 +146,8 @@ async def is_payment_handler(query: CallbackQuery, state: FSMContext):
     await state.set_state(OrderStates.comment)
 
 
-@main_router.message(OrderStates.after_change, F.text)
-@main_router.message(OrderStates.comment, F.text)
+@main_router.message(OrderStates.after_change, F.text != "Cancel")
+@main_router.message(OrderStates.comment, F.text != "Cancel")
 async def comment_handler(message: Message, state: FSMContext):
     if message.text != "Yo'q" or message.text != "Kommentariya yo'q":
         await state.update_data(comment=message.text)
@@ -180,7 +180,7 @@ Umumiy narx: {overall_price:,}"""
     await state.set_state(OrderStates.checkout)
 
 
-@main_router.message(OrderStates.checkout, F.text)
+@main_router.message(OrderStates.checkout, F.text != "Cancel")
 async def checkout_handler(message: Message, state: FSMContext, session: Session):
     if message.text == "To'g'ri":
         order_data = await state.get_data()
@@ -268,7 +268,7 @@ async def edit_order(message: Message, state: FSMContext):
     await state.set_state(EditOrderStates.id)
 
 
-@main_router.message(EditOrderStates.id, F.text)
+@main_router.message(EditOrderStates.id, F.text != "Cancel")
 async def edit_order(message: Message, state: FSMContext, session: Session):
     order = session.query(Order).where(Order.id == int(message.text)).first()
     if order:
